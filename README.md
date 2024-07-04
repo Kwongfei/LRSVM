@@ -20,3 +20,14 @@ Output:
     train_error_rate: error of the training set
     test_error_rate: error of the testing set
     Fval： Value of objective function
+
+cite:
+```
+@article{liang2024support,
+  title={Support vector machine with discriminative low-rank embedding},
+  author={Liang, Guangfei and Lai, Zhihui and Kong, Heng},
+  journal={CAAI Transactions on Intelligence Technology},
+  year={2024},
+  publisher={Wiley Online Library}
+}
+```
