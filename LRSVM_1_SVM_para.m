@@ -1,12 +1,15 @@
 %{
 README.txt:
 [w,b,e] = LRSVM_1_SVM_para(A,B,Alpha,X,y)
-ÒÑÖªA,B,Alpha£¬Çó½âLRSVMÖĞµÄw,b,eÖµ
+å·²çŸ¥A,B,Alphaï¼Œæ±‚è§£LRSVMä¸­çš„w,b,eå€¼
 
-ÊäÈë£º
-    A,B,Alpha,X,yº¬ÒåÍ¬LRSVMÖĞÊ¹ÓÃµÄ
-Êä³ö£º
-    w,b,eÎªSVMÖĞµÄ±äÁ¿¡£
+è¾“å…¥ï¼š
+    A,B,Alpha,X,yå«ä¹‰åŒLRSVMä¸­ä½¿ç”¨çš„
+è¾“å‡ºï¼š
+    w,b,eä¸ºSVMä¸­çš„å˜é‡ã€‚
+
+cite:
+Liang G, Lai Z, Kong H. Support vector machine with discriminative lowâ€rank embedding. CAAI Transactions on Intelligence Technology, 2024.
 %}
 
 function [w,b,e] = LRSVM_1_SVM_para(A,B,Alpha,X,y,C)
@@ -26,10 +29,10 @@ function [w,b,e] = LRSVM_1_SVM_para(A,B,Alpha,X,y,C)
         b = b / num;
     end
 %     if (num == 0)    %debug
-%         disp('Ã»ÓĞÖ§³ÖÏòÁ¿')
+%         disp('æ²¡æœ‰æ”¯æŒå‘é‡')
 %     end
     
-    e = zeros(N,1);   %ËÉ³Ú±äÁ¿
+    e = zeros(N,1);   %æ¾å¼›å˜é‡
     for i = 1:N
         if (Alpha(i)-C < 1e-6)
             e(i) = 0;
