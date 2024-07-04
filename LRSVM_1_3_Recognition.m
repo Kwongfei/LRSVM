@@ -1,18 +1,21 @@
 %{
 README.txt:
 LRSVM_1_3_Recognition(train, test, train_labels, test_labels, Lambda, C, s)
-Éè¼Æµü´úËã·¨ÊµÏÖLRSVMOB,²¢ÇÒ¶Ô²âÊÔ¼¯×÷Ê¶±ğ¡£
+è®¾è®¡è¿­ä»£ç®—æ³•å®ç°LRSVMOB,å¹¶ä¸”å¯¹æµ‹è¯•é›†ä½œè¯†åˆ«ã€‚
 
-ÊäÈë£º
-    train, test£ºÑµÁ·¼¯ºÍ²âÊÔ¼¯£¬Ã¿Ò»ÁĞÊÇÒ»¸öÊı¾İ
-    train_labels, test_labels£º±êÇ©£¬×ÖµäĞÎÊ½¡£
-    Lambda: »Ø¹éÏîÏµÊı
-    C£ºËÉ³Ú±äÁ¿µÄ³Í·£Ïî
-    s£ºÖÈ
-Êä³ö£º
-train_error_rate: ÑµÁ·¼¯´íÎóÂÊ
-test_error_rate: ²âÊÔ¼¯´íÎóÂÊ
-Fval£º Ä¿±êº¯ÊıÖµ
+è¾“å…¥ï¼š
+    train, testï¼šè®­ç»ƒé›†å’Œæµ‹è¯•é›†ï¼Œæ¯ä¸€åˆ—æ˜¯ä¸€ä¸ªæ•°æ®
+    train_labels, test_labelsï¼šæ ‡ç­¾ï¼Œå­—å…¸å½¢å¼ã€‚
+    Lambda: å›å½’é¡¹ç³»æ•°
+    Cï¼šæ¾å¼›å˜é‡çš„æƒ©ç½šé¡¹
+    sï¼šç§©
+è¾“å‡ºï¼š
+train_error_rate: è®­ç»ƒé›†é”™è¯¯ç‡
+test_error_rate: æµ‹è¯•é›†é”™è¯¯ç‡
+Fvalï¼š ç›®æ ‡å‡½æ•°å€¼
+
+cite:
+Liang G, Lai Z, Kong H. Support vector machine with discriminative lowâ€rank embedding. CAAI Transactions on Intelligence Technology, 2024.
 %}
 
 function [train_error_rate, test_error_rate, Fval] = LRSVM_1_3_Recognition(train, test, train_labels, test_labels, Lambda, C, s)
@@ -39,7 +42,7 @@ function [train_error_rate, test_error_rate, Fval] = LRSVM_1_3_Recognition(train
     f = -ones(N,1);
     lb = zeros(N,1);
     ub = C*ones(size(lb));
-    Alpha = quadprog(H,f,[],[],[],[],lb,ub);    %¸ù¾İËæ»úÉú³ÉµÄAÉú³ÉAlpha
+    Alpha = quadprog(H,f,[],[],[],[],lb,ub);    %æ ¹æ®éšæœºç”Ÿæˆçš„Aç”ŸæˆAlpha
     [w,~,e] = LRSVM_1_SVM_para(A,B,Alpha,X,y,C);
     Fval0 = w'*w/2+Lambda*norm(Y-X'*A*B,'fro')+C*sum(e);
     
@@ -50,9 +53,9 @@ function [train_error_rate, test_error_rate, Fval] = LRSVM_1_3_Recognition(train
     Alpha_all = zeros(N,T_max);
     while (T < T_max)
         T = T + 1;
-        disp('µ±Ç°µü´ú´ÎÊı£º')
+        disp('å½“å‰è¿­ä»£æ¬¡æ•°ï¼š')
         disp(T)
-        % µü´ú¸üĞÂ¾ØÕóA,B
+        % è¿­ä»£æ›´æ–°çŸ©é˜µA,B
         H = (Y'*X'/(X*(eye(N)-(Alpha.*y)*(Alpha.*y)'/(2*Lambda))*X'+0.00001*eye(d)))*X*Y;
         [EV, D] = eig((H+H') / 2);
         [~, ind] = sort(diag(D),'descend');
@@ -60,15 +63,15 @@ function [train_error_rate, test_error_rate, Fval] = LRSVM_1_3_Recognition(train
         B = EVs(:,1:s)';
         A = (X*(2*eye(N)-(Alpha.*y)*(Alpha.*y)'/Lambda)*X'+0.00001*eye(d))\(X*Y*B')/(B*B'+0.00001*eye(s))*2;
         
-%         disp('Çó½âAlpha')
-        % µü´ú¸üĞÂalpha
+%         disp('æ±‚è§£Alpha')
+        % è¿­ä»£æ›´æ–°alpha
         H1 = (B'*A'*X).*(ones(c,1)*y');
         H = H1'*H1/2;
         H = (H+H')/2;
         f = -ones(N,1);
         lb = zeros(N,1);
         ub = C*ones(size(lb));
-        Alpha = quadprog(H,f,[],[],[],[],lb,ub);    %¸ù¾İËæ»úÉú³ÉµÄAÉú³ÉAlpha
+        Alpha = quadprog(H,f,[],[],[],[],lb,ub);    %æ ¹æ®éšæœºç”Ÿæˆçš„Aç”ŸæˆAlpha
         
         Alpha_all(:,T) = Alpha;
         
@@ -81,7 +84,7 @@ function [train_error_rate, test_error_rate, Fval] = LRSVM_1_3_Recognition(train
     end
     
 %     plot(Fval);
-%     title('Ä¿±êº¯ÊıÖµ')
+%     title('ç›®æ ‡å‡½æ•°å€¼')
     Fval = [Fval0;Fval(1:T)];
     
     [w,b,~] = LRSVM_1_SVM_para(A,B,Alpha,X,y,C);
